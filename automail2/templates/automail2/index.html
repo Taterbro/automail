@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <title>
+        Hello!
+    </title>
+
+    <body>
+<form action='success' method="post">
+    {% csrf_token %}
+    <input type="text" placeholder="your name" name="yname">
+    <br>
+    <input type="text" placeholder="your email address" name="yemail">
+    <br>
+    <input type="text" placeholder="item purchased" name="itemp">
+    <br>
+    <input type="submit">
+</form>
+</body>
+</html>
