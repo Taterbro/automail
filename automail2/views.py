@@ -1,3 +1,5 @@
+from smtplib import SMTPConnectError
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -9,13 +11,29 @@ def index(request):
 
 def success(request):
     if request.method == 'POST':
-        template = render_to_string('automail2/tempp.html', {'name': request.POST['yname'], 'item': request.POST['itemp']})
-    
+        name = request.POST['yname']
+        item = request.POST['itemp']
+        email = request.POST['yemail']   
+         
+        subject = f'Order is being processed'
+        message = render_to_string('automail2/tempp.html', {
+                'name': name,
+                'item': item,
+            })
         email = EmailMessage(
-            'Order is being processed',
-            template,
-            settings.EMAIL_HOST_USER,
-            [request.POST['yemail']])
-        email.fail_silently = False
-        email.send()
-        return render(request, 'automail2/success.html')
+            subject, message, to=[email],
+        )
+        email.content_subtype = 'html'
+        try:
+            email.send()
+        
+        except:
+            return HttpResponse('something went wrong!')
+        else:
+            return render(request, 'automail2/success.html')
+        
+        
+        
+        
+        
+        
